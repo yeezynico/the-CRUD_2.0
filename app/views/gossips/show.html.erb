@@ -1,0 +1,59 @@
+<h1>Titre : <%= @gossip.title %></h1>
+<p>Contenu : <%= @gossip.content %></p>
+<p>Auteur : <%= @gossip.user.first_name %> <%= @gossip.user.last_name%></p>
+<p>Ville de l'auteur : <%= @gossip.user.city.name %></p>
+
+<a class="btn btn-outline-secondary btn-sm" role="button" href="<%=city_path(@gossip.user.city_id)%>">Voir les gossips de <%=@gossip.user.city.name%></a>
+
+<p>
+  <%= link_to "Voir l'auteur", {controller: "user", action: "show", id: @gossip.user.id}, class: "btn btn-primary mt-3" %>
+</p>
+
+<% if current_user == @gossip.user.id %>
+  <p>
+    <a href="<%= edit_gossip_path %>" class="btn btn-primary">Modifier le gossip</a>
+  </p>
+
+  <p>
+  <%= link_to "Supprimer le gossip", gossip_path(@gossip), data: {
+    turbo_method: :delete,
+    turbo_confirm: "Are you sure ?"
+  } %>
+  </p>
+<% end %>
+
+
+<% if current_user%>
+  <%= button_to 'Like', gossip_likes_path(@gossip), method: :post, class:"btn btn-outline-info btn-sm" %>
+  <p class="p-2"> <%= @gossip.likes.count %>  <i class="fas fa-heart"></i></p>
+<%end%>
+
+
+<%= form_tag gossip_comments_path(@gossip), action: 'create', method: "post" do %>
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <%= label_tag 'Lâche ton commentaire' %>
+  <%= text_field_tag 'content', @content, placeholder: 'Écris ton commentaire..'%> <br>
+  <%= submit_tag "Publie ton commentaire" %>
+<% end %>
+
+
+<% ordered_comment = @comment.order(created_at: :desc) %>
+<% ordered_comment.each do |comment| %>
+  <div class= "col-4 col-sm-4 col-md-4 col-lg-4 mt-5 text-center" > 
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <p class="card-text">Auteur : <%= comment.user.first_name %></p>
+          <p class="card-text">Commentaire : <%= comment.content %></p>
+          <%= link_to "Modifier", edit_gossip_comment_path(@gossip, comment), class:"btn btn-primary" %>
+         <%= link_to "Supprimer", gossip_comment_path(@gossip, comment.id),data: {turbo_method: :delete,turbo_confirm: "Are you sure ?"} %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+
+
+
+<p>
+  <a href="<%= basic_pages_home_path %>" class="btn btn-primary">Revenir aux gossips</a>
+</p>

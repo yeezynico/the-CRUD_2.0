@@ -1,0 +1,8 @@
+<h1>Modifier le commentaire </h1>
+
+<%= form_for([@gossip,@comment],:url=>gossip_comment_path, :method => :put) do |f| %>
+  <%= label_tag 'Commentaire' %>
+  <%= text_field_tag 'content', @comment.content %>
+  <br> <br>
+  <%= submit_tag "Modifier", class: "btn btn-secondary " %>
+<% end %>
