@@ -82,3 +82,10 @@ color: #316ce8;
   overflow: hidden;
   border-radius: 4px;
 }
+
+body {
+  background-image: url('route.avif'); /* Chemin vers votre image */
+  background-size: cover; /* Pour couvrir toute la zone de l'arrière-plan */
+  background-position: center; /* Pour centrer l'image */
+  background-repeat: no-repeat; /* Pour éviter la répétition de l'image */
+}
